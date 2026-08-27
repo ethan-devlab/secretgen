@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "Interactive and scriptable cryptographically secure secret and key artifact generator with 67 presets",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethan-devlab/secretgen.git"
+  },
   "bin": {
     "secretgen": "./bin/secretgen.js"
   },

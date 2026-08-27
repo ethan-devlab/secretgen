@@ -123,6 +123,7 @@ An ecosystem preset generates a locally created value in the documented format. 
 
 ```bash
 npm install
+npm link
 npm test
 npm run check
 node ./bin/secretgen.js generic:password --length 48
