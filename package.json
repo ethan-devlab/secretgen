@@ -1,0 +1,49 @@
+{
+  "name": "@ethan-devlab/secretgen",
+  "version": "0.1.0",
+  "description": "Interactive and scriptable cryptographically secure secret and key artifact generator with 67 presets",
+  "type": "module",
+  "bin": {
+    "secretgen": "./bin/secretgen.js"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "check": "npm test && node ./bin/secretgen.js --list && npm pack --dry-run"
+  },
+  "dependencies": {
+    "@wordlist/english-eff": "1.0.1",
+    "age-encryption": "0.3.0",
+    "libsodium-wrappers": "0.8.4",
+    "paseto-ts": "2.0.6",
+    "sshpk": "1.18.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "secret",
+    "generator",
+    "django",
+    "fernet",
+    "jwt",
+    "keypair",
+    "totp",
+    "passphrase",
+    "laravel",
+    "rails",
+    "phoenix",
+    "authjs",
+    "security",
+    "cli"
+  ],
+  "license": "MIT"
+}

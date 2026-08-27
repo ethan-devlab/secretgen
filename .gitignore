@@ -1,0 +1,10 @@
+node_modules/
+.codegraph/
+*.tgz
+coverage/
+.secretgen-*
+.env
+.env.*
+!.env.example
+.DS_Store
+keys/
