@@ -1,6 +1,6 @@
 # @ethan-devlab/secretgen
 
-A Node.js 22+ CLI and library for cryptographically secure secrets, provisioning bundles, public nonce/salt material, and asymmetric key artifacts. It includes **67 presets**: the original 30 scalar presets plus 37 new presets.
+A Node.js 22+ CLI and library for cryptographically secure secrets, provisioning bundles, public nonce/salt material, and asymmetric key artifacts. It includes **67 presets**.
 
 ## Quick start
 
