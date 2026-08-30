@@ -295,10 +295,10 @@ export async function configurePreset(preset, supplied = {}) {
   return values;
 }
 
-export async function chooseArtifactOutput() {
+export async function chooseArtifactOutput(stdoutDescription = 'stdout JSON') {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
   try {
-    const answer = (await rl.question('Output bundle directory, or Enter for stdout JSON: ')).trim();
+    const answer = (await rl.question(`Output bundle directory, or Enter for ${stdoutDescription}: `)).trim();
     return answer || null;
   } finally {
     rl.close();

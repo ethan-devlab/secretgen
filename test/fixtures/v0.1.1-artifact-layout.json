@@ -1,0 +1,18 @@
+{
+  "hotp:provisioning": {
+    "metadataKeys": ["counter", "digits", "type"],
+    "parts": [["secret", "secret.txt"], ["provisioning-uri", "otpauth-uri.txt"], ["metadata", "metadata.json"]]
+  },
+  "pem:keypair": {
+    "metadataKeys": ["algorithm", "bits", "encrypted"],
+    "parts": [["private-key", "private-key.pem"], ["public-key", "public-key.pem"]]
+  },
+  "wireguard:keypair": {
+    "metadataKeys": ["algorithm"],
+    "parts": [["private-key", "privatekey"], ["public-key", "publickey"]]
+  },
+  "sodium:box-keypair": {
+    "metadataKeys": ["algorithm", "privateBytes", "publicBytes"],
+    "parts": [["private-key", "box.private"], ["public-key", "box.public"]]
+  }
+}

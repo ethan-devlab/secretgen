@@ -1,6 +1,6 @@
 # @ethan-devlab/secretgen
 
-A Node.js 22+ CLI and library for cryptographically secure secrets, provisioning bundles, public nonce/salt material, and asymmetric key artifacts. It includes **67 presets**.
+A Node.js 22+ CLI and library for cryptographically secure secrets, provisioning bundles, public nonce/salt material, and asymmetric key artifacts. It includes **80 presets**.
 
 ## Quick start
 
@@ -34,17 +34,19 @@ const keypair = await generateArtifact('pem:keypair', { algorithm: 'ed25519' });
 
 Run `secretgen --list` for all aliases and configurable flags, or `secretgen --info <preset>` for option ranges and defaults.
 
-The 30 original presets remain available:
+| Category | Presets |
+|----------|---------|
+| Generic and Python | `generic:hex`, `generic:base64`, `generic:base64url`, `generic:alphanumeric`, `generic:password`, `python:token-hex`, `python:token-urlsafe` |
+| Frameworks | `django:secret-key`, `flask:secret-key`, `fastapi:jwt-secret`, `cryptography:fernet`, `express:session-secret`, `express:cookie-secret`, `authjs:secret`, `iron-session:password`, `rails:secret-key-base`, `laravel:app-key`, `symfony:app-secret`, `phoenix:secret-key-base`, `wordpress:salts` |
+| Cryptography | `jwt:hs256`, `jwt:hs384`, `jwt:hs512`, `aes:128`, `aes:192`, `aes:256`, `chacha20-poly1305:key`, `hmac:sha256`, `hmac:sha512`, `totp:secret` |
+| Scalars and application secrets | `generic:base32`, `generic:urlsafe-string`, `generic:passphrase`, `uuid:v4`, `uuid:v7`, `better-auth:secret`, `nuxt:session-password`, `adonis:app-key`, `codeigniter:encryption-key`, `spring:base64-key`, `github:webhook-secret`, `oauth:pkce-verifier`, `rails:master-key`, `wireguard:preshared-key`, `paseto:v4-local-key`, `hmac:sha384`, `hotp:secret`, `sodium:secretbox-key` |
+| Provisioning and material bundles | `hotp:provisioning`, `totp:provisioning`, `mfa:recovery-codes`, `aspnet:machine-key`, `salt:argon2`, `nonce:aes-gcm`, `nonce:chacha20-poly1305`, `nonce:xchacha20-poly1305`, `iv:aes-cbc` |
+| Key artifacts | `pem:keypair`, `jwk:keypair`, `jwks:keyset`, `openssh:keypair`, `wireguard:keypair`, `age:keypair`, `paseto:v4-public-keypair`, `sodium:box-keypair`, `sodium:sign-keypair`, `dkim:keypair` |
+| Deployment and infrastructure | `strapi:secrets`, `mongodb:keyfile`, `consul:gossip-key`, `nomad:gossip-key`, `rabbitmq:erlang-cookie`, `nats:nkey` |
+| Application secrets and identifiers | `directus:secret`, `payload:secret`, `keystone:session-secret`, `id:nanoid` |
+| Encodings | `generic:base58`, `generic:base32hex`, `generic:base32-crockford` |
 
-- Generic and Python: `generic:hex`, `generic:base64`, `generic:base64url`, `generic:alphanumeric`, `generic:password`, `python:token-hex`, `python:token-urlsafe`
-- Frameworks: `django:secret-key`, `flask:secret-key`, `fastapi:jwt-secret`, `cryptography:fernet`, `express:session-secret`, `express:cookie-secret`, `authjs:secret`, `iron-session:password`, `rails:secret-key-base`, `laravel:app-key`, `symfony:app-secret`, `phoenix:secret-key-base`, `wordpress:salts`
-- Cryptography: `jwt:hs256`, `jwt:hs384`, `jwt:hs512`, `aes:128`, `aes:192`, `aes:256`, `chacha20-poly1305:key`, `hmac:sha256`, `hmac:sha512`, `totp:secret`
-
-The 37 additions are:
-
-- Scalars and application secrets: `generic:base32`, `generic:urlsafe-string`, `generic:passphrase`, `uuid:v4`, `uuid:v7`, `better-auth:secret`, `nuxt:session-password`, `adonis:app-key`, `codeigniter:encryption-key`, `spring:base64-key`, `github:webhook-secret`, `oauth:pkce-verifier`, `rails:master-key`, `wireguard:preshared-key`, `paseto:v4-local-key`, `hmac:sha384`, `hotp:secret`, `sodium:secretbox-key`
-- Provisioning and material bundles: `hotp:provisioning`, `totp:provisioning`, `mfa:recovery-codes`, `aspnet:machine-key`, `salt:argon2`, `nonce:aes-gcm`, `nonce:chacha20-poly1305`, `nonce:xchacha20-poly1305`, `iv:aes-cbc`
-- Key artifacts: `pem:keypair`, `jwk:keypair`, `jwks:keyset`, `openssh:keypair`, `wireguard:keypair`, `age:keypair`, `paseto:v4-public-keypair`, `sodium:box-keypair`, `sodium:sign-keypair`, `dkim:keypair`
+`strapi:secrets` writes `.env`, `strapi-secrets.json`, and public `metadata.json`. Its six environment keys are `APP_KEYS` (four independent values), `API_TOKEN_SALT`, `ADMIN_JWT_SECRET`, `JWT_SECRET`, `TRANSFER_TOKEN_SALT`, and `ENCRYPTION_KEY`. Each of the nine values is independent, padded Base64 for 32 random bytes.
 
 Provider-issued API keys, access tokens, certificates, CSRs, password hashes, and legacy weak formats are intentionally out of scope. Those values require an issuer, an application policy, or a different lifecycle than local random generation.
 
@@ -61,7 +63,7 @@ secretgen --info <preset>
 -n, --count <n>                       # scalar or artifact batch
     --format raw|env|json             # scalar output; artifacts default to JSON
     --env-name <NAME>                 # scalar env output
-    --output-dir <path>               # artifact bundle directory
+    --output-dir <path>               # artifact or scalar bundle directory
     --part <role|filename>            # one raw artifact part on stdout
     --force                           # replace an existing bundle
     --passphrase-env <NAME>           # private-key passphrase source
@@ -80,9 +82,20 @@ secretgen jwk:keypair --algorithm ec --curve P-384 --output-dir ./signing-key
 secretgen dkim:keypair --selector mail --domain example.com --output-dir ./dkim
 ```
 
-Scalar raw mode prints only generated values to stdout. Artifact mode prints a JSON envelope by default. Binary parts in that envelope use Base64. `--part` selects one role or filename and writes its raw content.
+Scalar raw mode prints only generated values to stdout. Artifact mode prints a JSON envelope by default. Binary parts in that envelope use Base64. `--part` selects one role or filename and writes its raw content. `--info` also reports scalar sensitivity: only UUID v4, UUID v7, and NanoID are public identifiers; all other scalar values are secret.
 
 Artifact batches use numbered subdirectories. RSA and DKIM RSA generation is limited to 10 artifacts per command; other artifact presets are limited to 100; scalar presets are limited to 1,000.
+
+## Scalar bundle output
+
+Every scalar preset accepts `--output-dir`. It writes the already-generated value once, with no change to the library API or ordinary stdout format:
+
+- Most presets write `value.txt` with role `value`.
+- `rabbitmq:erlang-cookie` writes `.erlang.cookie` with role `cookie`.
+- Secret scalar files use mode `0600`; UUID and NanoID identifier files use `0644`.
+- Batches retain the numbered-directory layout and the manifest never contains generated values.
+
+`--output-dir` cannot be combined with `--format`, `--env-name`, `--part`, or passphrase flags. `--force` is only valid with `--output-dir`. In interactive scalar mode, secretgen asks for an output directory after options; press Enter to keep stdout output.
 
 ## Private-key encryption
 
@@ -113,7 +126,7 @@ Treat stdout JSON as sensitive for keypair and provisioning presets because it c
 - No `Math.random()`, seed option, telemetry, or network calls.
 - Fixed-format presets reject incompatible size overrides.
 - EFF long-list passphrases use unbiased CSPRNG word selection.
-- UUID v4 and v7 set their required version and variant bits.
+- UUID v4 uses Node.js CSPRNG and UUID v7 uses the maintained `uuid` implementation.
 - Salts, nonces, and IV presets label their material as public and unique-per-operation. They are not reusable encryption keys.
 - Aliases resolve through one registry, and typed option validation is shared by the CLI and library APIs.
 
@@ -126,5 +139,6 @@ npm install
 npm link
 npm test
 npm run check
+npm audit --omit=dev
 node ./bin/secretgen.js generic:password --length 48
 ```

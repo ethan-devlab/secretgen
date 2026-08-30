@@ -16,12 +16,14 @@ export function normalizePreset(preset) {
     },
   ] : []);
 
-  return {
+  const normalized = {
     kind: 'scalar',
     countLimit: 1000,
     ...preset,
     options: options.map(cloneOption),
   };
+  if (normalized.kind === 'scalar' && normalized.sensitivity === undefined) normalized.sensitivity = 'secret';
+  return normalized;
 }
 
 export function optionIsActive(option, values) {

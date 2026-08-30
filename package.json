@@ -1,7 +1,7 @@
 {
   "name": "@ethan-devlab/secretgen",
-  "version": "0.1.1",
-  "description": "Interactive and scriptable cryptographically secure secret and key artifact generator with 67 presets",
+  "version": "0.2.0",
+  "description": "Interactive and scriptable cryptographically secure secret and key artifact generator with 80 presets",
   "type": "module",
   "repository": {
     "type": "git",
@@ -24,11 +24,19 @@
     "check": "npm test && node ./bin/secretgen.js --list && npm pack --dry-run"
   },
   "dependencies": {
+    "@biomejs/biome": "^2.5.11",
+    "@nats-io/nkeys": "2.0.3",
+    "@otplib/uri": "13.5.0",
+    "@scure/base": "2.4.0",
     "@wordlist/english-eff": "1.0.1",
     "age-encryption": "0.3.0",
+    "jose": "6.2.10",
     "libsodium-wrappers": "0.8.4",
+    "nanoid": "6.0.1",
+    "otplib": "13.5.0",
     "paseto-ts": "2.0.6",
-    "sshpk": "1.18.0"
+    "sshpk": "1.18.0",
+    "uuid": "14.0.2"
   },
   "engines": {
     "node": ">=22"

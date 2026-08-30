@@ -1,0 +1,2135 @@
+{
+  "version": "0.1.1",
+  "presets": [
+    {
+      "id": "generic:hex",
+      "aliases": [
+        "hex"
+      ],
+      "kind": "scalar",
+      "category": "Generic",
+      "label": "Hex token",
+      "description": "Cryptographically secure random bytes encoded as lowercase hex.",
+      "env": "SECRET_KEY",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 1,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "generic:base64",
+      "aliases": [
+        "base64"
+      ],
+      "kind": "scalar",
+      "category": "Generic",
+      "label": "Base64 token",
+      "description": "Cryptographically secure random bytes encoded as padded Base64.",
+      "env": "SECRET_KEY",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 1,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "generic:base64url",
+      "aliases": [
+        "base64url",
+        "urlsafe"
+      ],
+      "kind": "scalar",
+      "category": "Generic",
+      "label": "Base64URL token",
+      "description": "Cryptographically secure random bytes encoded as unpadded Base64URL.",
+      "env": "SECRET_KEY",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 1,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "generic:alphanumeric",
+      "aliases": [
+        "alphanumeric",
+        "alnum"
+      ],
+      "kind": "scalar",
+      "category": "Generic",
+      "label": "Alphanumeric secret",
+      "description": "Random A-Z, a-z and 0-9 characters using unbiased secure sampling.",
+      "env": "SECRET_KEY",
+      "options": [
+        {
+          "name": "length",
+          "cliName": "length",
+          "type": "integer",
+          "unit": "characters",
+          "default": 48,
+          "min": 1,
+          "max": 16384
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "generic:password",
+      "aliases": [
+        "password",
+        "passwd"
+      ],
+      "kind": "scalar",
+      "category": "Generic",
+      "label": "Strong machine password",
+      "description": "Random printable ASCII password for machine-managed credentials.",
+      "env": "PASSWORD",
+      "options": [
+        {
+          "name": "length",
+          "cliName": "length",
+          "type": "integer",
+          "unit": "characters",
+          "default": 32,
+          "min": 1,
+          "max": 16384
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "generic:base32",
+      "aliases": [
+        "base32",
+        "rfc4648-base32"
+      ],
+      "kind": "scalar",
+      "category": "Generic",
+      "label": "Base32 token",
+      "description": "RFC 4648 uppercase Base32 secret, optionally padded.",
+      "env": "SECRET_KEY",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 1,
+          "max": 4096
+        },
+        {
+          "name": "padding",
+          "cliName": "padding",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "generic:urlsafe-string",
+      "aliases": [
+        "url-string",
+        "url-secret"
+      ],
+      "kind": "scalar",
+      "category": "Generic",
+      "label": "Exact-length URL-safe secret",
+      "description": "Exact-length random string using the RFC 3986 unreserved alphabet.",
+      "env": "SECRET_KEY",
+      "options": [
+        {
+          "name": "length",
+          "cliName": "length",
+          "type": "integer",
+          "unit": "characters",
+          "default": 48,
+          "min": 1,
+          "max": 16384
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "generic:passphrase",
+      "aliases": [
+        "passphrase",
+        "diceware"
+      ],
+      "kind": "scalar",
+      "category": "Generic",
+      "label": "EFF Diceware passphrase",
+      "description": "Memorable passphrase generated from the 7,776-word EFF long wordlist.",
+      "env": "PASSPHRASE",
+      "options": [
+        {
+          "name": "words",
+          "cliName": "words",
+          "type": "integer",
+          "default": 6,
+          "min": 4,
+          "max": 20,
+          "unit": "words"
+        },
+        {
+          "name": "separator",
+          "cliName": "separator",
+          "type": "enum",
+          "default": "hyphen",
+          "choices": [
+            "hyphen",
+            "space",
+            "underscore",
+            "dot"
+          ]
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "uuid:v4",
+      "aliases": [
+        "uuid",
+        "uuid4"
+      ],
+      "kind": "scalar",
+      "category": "Identifiers",
+      "label": "UUID version 4",
+      "description": "CSPRNG-backed RFC 9562 UUIDv4 identifier with 122 random bits.",
+      "env": null,
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "uuid:v7",
+      "aliases": [
+        "uuid7"
+      ],
+      "kind": "scalar",
+      "category": "Identifiers",
+      "label": "UUID version 7",
+      "description": "Time-ordered RFC 9562 UUIDv7 identifier that exposes its generation millisecond.",
+      "env": null,
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "python:token-hex",
+      "aliases": [
+        "token-hex",
+        "python-hex"
+      ],
+      "kind": "scalar",
+      "category": "Python",
+      "label": "Python secrets.token_hex",
+      "description": "Format-compatible with Python secrets.token_hex(nbytes).",
+      "env": "SECRET_KEY",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 1,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "python:token-urlsafe",
+      "aliases": [
+        "token-urlsafe",
+        "python-urlsafe"
+      ],
+      "kind": "scalar",
+      "category": "Python",
+      "label": "Python secrets.token_urlsafe",
+      "description": "Format-compatible URL-safe Base64 token generated from n random bytes.",
+      "env": "SECRET_KEY",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 1,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "django:secret-key",
+      "aliases": [
+        "django"
+      ],
+      "kind": "scalar",
+      "category": "Python",
+      "label": "Django SECRET_KEY",
+      "description": "Django-compatible 50-character SECRET_KEY using Django’s current alphabet.",
+      "env": "DJANGO_SECRET_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "flask:secret-key",
+      "aliases": [
+        "flask"
+      ],
+      "kind": "scalar",
+      "category": "Python",
+      "label": "Flask SECRET_KEY",
+      "description": "Matches Flask documentation’s recommended secrets.token_hex() style.",
+      "env": "FLASK_SECRET_KEY",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 1,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "fastapi:jwt-secret",
+      "aliases": [
+        "fastapi"
+      ],
+      "kind": "scalar",
+      "category": "Python",
+      "label": "FastAPI JWT SECRET_KEY",
+      "description": "Matches FastAPI tutorial’s `openssl rand -hex 32` HS256 secret style.",
+      "env": "SECRET_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "cryptography:fernet",
+      "aliases": [
+        "fernet"
+      ],
+      "kind": "scalar",
+      "category": "Python",
+      "label": "cryptography Fernet key",
+      "description": "Fernet-compatible URL-safe Base64-encoded 32-byte key with padding.",
+      "env": "FERNET_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "express:session-secret",
+      "aliases": [
+        "express-session"
+      ],
+      "kind": "scalar",
+      "category": "JavaScript",
+      "label": "Express session secret",
+      "description": "32 bytes of entropy for express-session HMAC signing, Base64URL encoded.",
+      "env": "SESSION_SECRET",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 32,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "express:cookie-secret",
+      "aliases": [
+        "express-cookie",
+        "cookie-parser"
+      ],
+      "kind": "scalar",
+      "category": "JavaScript",
+      "label": "Express cookie secret",
+      "description": "High-entropy signing secret suitable for cookie-parser signed cookies.",
+      "env": "COOKIE_SECRET",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 32,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "authjs:secret",
+      "aliases": [
+        "authjs",
+        "nextauth"
+      ],
+      "kind": "scalar",
+      "category": "JavaScript",
+      "label": "Auth.js AUTH_SECRET",
+      "description": "High-entropy random token suitable for Auth.js AUTH_SECRET.",
+      "env": "AUTH_SECRET",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "iron-session:password",
+      "aliases": [
+        "iron-session",
+        "iron"
+      ],
+      "kind": "scalar",
+      "category": "JavaScript",
+      "label": "iron-session password",
+      "description": "64-character high-entropy password; iron-session requires at least 32 characters.",
+      "env": "SESSION_PASSWORD",
+      "options": [
+        {
+          "name": "length",
+          "cliName": "length",
+          "type": "integer",
+          "unit": "characters",
+          "default": 64,
+          "min": 32,
+          "max": 16384
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "better-auth:secret",
+      "aliases": [
+        "better-auth",
+        "betterauth"
+      ],
+      "kind": "scalar",
+      "category": "JavaScript",
+      "label": "Better Auth secret",
+      "description": "High-entropy Base64 secret for BETTER_AUTH_SECRET or AUTH_SECRET.",
+      "env": "BETTER_AUTH_SECRET",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 24,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "nuxt:session-password",
+      "aliases": [
+        "nuxt-session",
+        "nuxt-auth-utils"
+      ],
+      "kind": "scalar",
+      "category": "JavaScript",
+      "label": "Nuxt session password",
+      "description": "High-entropy Base64URL value for NUXT_SESSION_PASSWORD.",
+      "env": "NUXT_SESSION_PASSWORD",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 24,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "adonis:app-key",
+      "aliases": [
+        "adonis",
+        "adonis-app-key"
+      ],
+      "kind": "scalar",
+      "category": "JavaScript",
+      "label": "AdonisJS APP_KEY",
+      "description": "Cryptographically secure 32-character application key for AdonisJS.",
+      "env": "APP_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "rails:secret-key-base",
+      "aliases": [
+        "rails",
+        "rails-secret"
+      ],
+      "kind": "scalar",
+      "category": "Ruby / PHP / Elixir",
+      "label": "Rails secret_key_base",
+      "description": "128 hex characters, matching Rails SecureRandom.hex(64) / bin/rails secret style.",
+      "env": "SECRET_KEY_BASE",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "laravel:app-key",
+      "aliases": [
+        "laravel"
+      ],
+      "kind": "scalar",
+      "category": "Ruby / PHP / Elixir",
+      "label": "Laravel APP_KEY",
+      "description": "Laravel AES-256 application key: `base64:` plus 32 random bytes.",
+      "env": "APP_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "symfony:app-secret",
+      "aliases": [
+        "symfony"
+      ],
+      "kind": "scalar",
+      "category": "Ruby / PHP / Elixir",
+      "label": "Symfony APP_SECRET",
+      "description": "Long immutable random string suitable for Symfony kernel.secret / APP_SECRET.",
+      "env": "APP_SECRET",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "phoenix:secret-key-base",
+      "aliases": [
+        "phoenix",
+        "phx"
+      ],
+      "kind": "scalar",
+      "category": "Ruby / PHP / Elixir",
+      "label": "Phoenix SECRET_KEY_BASE",
+      "description": "Mirrors `mix phx.gen.secret` default: exactly 64 Base64 characters without padding.",
+      "env": "SECRET_KEY_BASE",
+      "options": [
+        {
+          "name": "length",
+          "cliName": "length",
+          "type": "integer",
+          "unit": "characters",
+          "default": 64,
+          "min": 32,
+          "max": 4096
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "wordpress:salts",
+      "aliases": [
+        "wordpress",
+        "wp-salts"
+      ],
+      "kind": "scalar",
+      "category": "Ruby / PHP / Elixir",
+      "label": "WordPress keys & salts",
+      "description": "Generates all 8 wp-config.php authentication keys and salts as copy-ready PHP lines.",
+      "env": null,
+      "options": [],
+      "countLimit": 1000,
+      "multiline": true
+    },
+    {
+      "id": "codeigniter:encryption-key",
+      "aliases": [
+        "codeigniter",
+        "ci-encryption-key"
+      ],
+      "kind": "scalar",
+      "category": "Ruby / PHP / Elixir",
+      "label": "CodeIgniter encryption key",
+      "description": "Copy-safe 32-byte CodeIgniter encryption key with a decoding prefix.",
+      "env": "encryption.key",
+      "options": [
+        {
+          "name": "encoding",
+          "cliName": "encoding",
+          "type": "enum",
+          "default": "hex2bin",
+          "choices": [
+            "hex2bin",
+            "base64"
+          ]
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "rails:master-key",
+      "aliases": [
+        "rails-master",
+        "rails-credentials-key"
+      ],
+      "kind": "scalar",
+      "category": "Ruby / PHP / Elixir",
+      "label": "Rails credentials master key",
+      "description": "Current Rails ActiveSupport::EncryptedFile key: 16 random bytes as 32 lowercase hex characters.",
+      "env": "RAILS_MASTER_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "spring:base64-key",
+      "aliases": [
+        "spring-base64",
+        "spring-security-key"
+      ],
+      "kind": "scalar",
+      "category": "Java / .NET",
+      "label": "Spring Security Base64 key",
+      "description": "Spring Base64StringKeyGenerator-compatible key with a secure 32-byte minimum.",
+      "env": null,
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 32,
+          "max": 128
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "github:webhook-secret",
+      "aliases": [
+        "github-webhook",
+        "webhook-secret"
+      ],
+      "kind": "scalar",
+      "category": "Webhooks / OAuth",
+      "label": "GitHub webhook secret",
+      "description": "Application-chosen high-entropy secret for validating GitHub webhook deliveries.",
+      "env": "GITHUB_WEBHOOK_SECRET",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 32,
+          "min": 32,
+          "max": 128
+        },
+        {
+          "name": "encoding",
+          "cliName": "encoding",
+          "type": "enum",
+          "default": "base64url",
+          "choices": [
+            "base64url",
+            "hex"
+          ]
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "oauth:pkce-verifier",
+      "aliases": [
+        "pkce",
+        "code-verifier"
+      ],
+      "kind": "scalar",
+      "category": "Webhooks / OAuth",
+      "label": "OAuth PKCE code verifier",
+      "description": "Request-bound RFC 7636 verifier using the RFC 3986 unreserved alphabet.",
+      "env": null,
+      "options": [
+        {
+          "name": "length",
+          "cliName": "length",
+          "type": "integer",
+          "unit": "characters",
+          "default": 43,
+          "min": 43,
+          "max": 128
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "jwt:hs256",
+      "aliases": [
+        "hs256"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "JWT HS256 key",
+      "description": "256-bit HMAC key, satisfying RFC 7518 minimum size for HS256.",
+      "env": "JWT_SECRET",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "jwt:hs384",
+      "aliases": [
+        "hs384"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "JWT HS384 key",
+      "description": "384-bit HMAC key, satisfying RFC 7518 minimum size for HS384.",
+      "env": "JWT_SECRET",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "jwt:hs512",
+      "aliases": [
+        "hs512"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "JWT HS512 key",
+      "description": "512-bit HMAC key, satisfying RFC 7518 minimum size for HS512.",
+      "env": "JWT_SECRET",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "aes:128",
+      "aliases": [
+        "aes128"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "AES-128 key",
+      "description": "128-bit uniformly random AES key encoded as hex.",
+      "env": "AES_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "aes:192",
+      "aliases": [
+        "aes192"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "AES-192 key",
+      "description": "192-bit uniformly random AES key encoded as hex.",
+      "env": "AES_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "aes:256",
+      "aliases": [
+        "aes256"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "AES-256 key",
+      "description": "256-bit uniformly random AES key encoded as hex.",
+      "env": "AES_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "chacha20-poly1305:key",
+      "aliases": [
+        "chacha20",
+        "chacha"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "ChaCha20-Poly1305 key",
+      "description": "256-bit uniformly random key for ChaCha20-Poly1305, encoded as hex.",
+      "env": "CHACHA20_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "hmac:sha256",
+      "aliases": [
+        "hmac256"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "HMAC-SHA256 key",
+      "description": "256-bit random HMAC key encoded as Base64URL.",
+      "env": "HMAC_SECRET",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "hmac:sha512",
+      "aliases": [
+        "hmac512"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "HMAC-SHA512 key",
+      "description": "512-bit random HMAC key encoded as Base64URL.",
+      "env": "HMAC_SECRET",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "hmac:sha384",
+      "aliases": [
+        "hmac384"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "HMAC-SHA384 key",
+      "description": "384-bit random HMAC key encoded as Base64URL.",
+      "env": "HMAC_SECRET",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "totp:secret",
+      "aliases": [
+        "totp",
+        "otp"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "TOTP shared secret",
+      "description": "160-bit random TOTP/HOTP shared secret encoded as RFC 4648 Base32 without padding.",
+      "env": "TOTP_SECRET",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 20,
+          "min": 16,
+          "max": 128
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "hotp:secret",
+      "aliases": [
+        "hotp"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "HOTP shared secret",
+      "description": "RFC 4226 shared secret encoded as uppercase unpadded Base32.",
+      "env": "HOTP_SECRET",
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "unit": "bytes",
+          "default": 20,
+          "min": 16,
+          "max": 128
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "wireguard:preshared-key",
+      "aliases": [
+        "wireguard-psk",
+        "wg-psk"
+      ],
+      "kind": "scalar",
+      "category": "Infrastructure",
+      "label": "WireGuard preshared key",
+      "description": "wg-compatible 32-byte preshared key encoded as padded Base64.",
+      "env": null,
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "paseto:v4-local-key",
+      "aliases": [
+        "paseto-local",
+        "k4-local"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "PASETO v4.local PASERK",
+      "description": "32-byte PASETO v4.local key serialized as a k4.local PASERK.",
+      "env": "PASETO_LOCAL_KEY",
+      "options": [],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "sodium:secretbox-key",
+      "aliases": [
+        "secretbox",
+        "sodium-secretbox"
+      ],
+      "kind": "scalar",
+      "category": "JWT / Crypto",
+      "label": "libsodium secretbox key",
+      "description": "32-byte crypto_secretbox key encoded for copy-safe storage.",
+      "env": "SECRETBOX_KEY",
+      "options": [
+        {
+          "name": "encoding",
+          "cliName": "encoding",
+          "type": "enum",
+          "default": "base64",
+          "choices": [
+            "base64",
+            "hex"
+          ]
+        }
+      ],
+      "countLimit": 1000,
+      "multiline": false
+    },
+    {
+      "id": "hotp:provisioning",
+      "aliases": [
+        "hotp-uri"
+      ],
+      "kind": "artifact",
+      "category": "Provisioning",
+      "label": "HOTP provisioning bundle",
+      "description": "HOTP secret, counter metadata and otpauth URI.",
+      "env": null,
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "default": 20,
+          "min": 16,
+          "max": 128,
+          "unit": "bytes"
+        },
+        {
+          "name": "counter",
+          "cliName": "counter",
+          "type": "integer",
+          "default": 0,
+          "min": 0,
+          "max": 9007199254740991,
+          "unit": "counter"
+        },
+        {
+          "name": "digits",
+          "cliName": "digits",
+          "type": "integer",
+          "default": 6,
+          "min": 6,
+          "max": 8,
+          "unit": "digits"
+        },
+        {
+          "name": "issuer",
+          "cliName": "issuer",
+          "type": "string",
+          "default": "secretgen",
+          "required": false,
+          "secret": false,
+          "maxLength": 512
+        },
+        {
+          "name": "account",
+          "cliName": "account",
+          "type": "string",
+          "default": "account",
+          "required": true,
+          "secret": false,
+          "maxLength": 512
+        }
+      ],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "totp:provisioning",
+      "aliases": [
+        "totp-uri"
+      ],
+      "kind": "artifact",
+      "category": "Provisioning",
+      "label": "TOTP provisioning bundle",
+      "description": "TOTP secret, parameters and otpauth URI.",
+      "env": null,
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "default": 20,
+          "min": 16,
+          "max": 128,
+          "unit": "bytes"
+        },
+        {
+          "name": "algorithm",
+          "cliName": "algorithm",
+          "type": "enum",
+          "default": "SHA1",
+          "choices": [
+            "SHA1",
+            "SHA256",
+            "SHA512"
+          ]
+        },
+        {
+          "name": "digits",
+          "cliName": "digits",
+          "type": "integer",
+          "default": 6,
+          "min": 6,
+          "max": 8,
+          "unit": "digits"
+        },
+        {
+          "name": "period",
+          "cliName": "period",
+          "type": "integer",
+          "default": 30,
+          "min": 1,
+          "max": 300,
+          "unit": "seconds"
+        },
+        {
+          "name": "issuer",
+          "cliName": "issuer",
+          "type": "string",
+          "default": "secretgen",
+          "required": false,
+          "secret": false,
+          "maxLength": 512
+        },
+        {
+          "name": "account",
+          "cliName": "account",
+          "type": "string",
+          "default": "account",
+          "required": true,
+          "secret": false,
+          "maxLength": 512
+        }
+      ],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "mfa:recovery-codes",
+      "aliases": [
+        "recovery-codes",
+        "backup-codes"
+      ],
+      "kind": "artifact",
+      "category": "Provisioning",
+      "label": "MFA recovery codes",
+      "description": "Application-policy one-time recovery-code bundle.",
+      "env": null,
+      "options": [
+        {
+          "name": "codes",
+          "cliName": "codes",
+          "type": "integer",
+          "default": 10,
+          "min": 5,
+          "max": 50,
+          "unit": "codes"
+        },
+        {
+          "name": "codeLength",
+          "cliName": "code-length",
+          "type": "integer",
+          "default": 10,
+          "min": 8,
+          "max": 32,
+          "unit": "characters"
+        },
+        {
+          "name": "alphabet",
+          "cliName": "alphabet",
+          "type": "enum",
+          "default": "numeric",
+          "choices": [
+            "numeric",
+            "alphanumeric"
+          ]
+        }
+      ],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "aspnet:machine-key",
+      "aliases": [
+        "aspnet-machinekey",
+        "machinekey"
+      ],
+      "kind": "artifact",
+      "category": "Java / .NET",
+      "label": "ASP.NET machineKey bundle",
+      "description": "Strong HMACSHA256/AES web-farm machineKey configuration.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "salt:argon2",
+      "aliases": [
+        "argon2-salt"
+      ],
+      "kind": "artifact",
+      "category": "Security Material",
+      "label": "Argon2 salt",
+      "description": "Public unique salt material; not a secret.",
+      "env": null,
+      "options": [
+        {
+          "name": "bytes",
+          "cliName": "bytes",
+          "type": "integer",
+          "default": 16,
+          "min": 8,
+          "max": 1024,
+          "unit": "bytes"
+        },
+        {
+          "name": "encoding",
+          "cliName": "encoding",
+          "type": "enum",
+          "default": "base64",
+          "choices": [
+            "base64",
+            "base64url",
+            "hex"
+          ]
+        }
+      ],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "nonce:aes-gcm",
+      "aliases": [
+        "aes-gcm-nonce"
+      ],
+      "kind": "artifact",
+      "category": "Security Material",
+      "label": "AES-GCM nonce",
+      "description": "Public 96-bit nonce that must be unique for every operation.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "nonce:chacha20-poly1305",
+      "aliases": [
+        "chacha20-nonce"
+      ],
+      "kind": "artifact",
+      "category": "Security Material",
+      "label": "ChaCha20-Poly1305 nonce",
+      "description": "Public 96-bit nonce that must be unique for every operation.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "nonce:xchacha20-poly1305",
+      "aliases": [
+        "xchacha20-nonce"
+      ],
+      "kind": "artifact",
+      "category": "Security Material",
+      "label": "XChaCha20-Poly1305 nonce",
+      "description": "Public 192-bit nonce that must be unique for every operation.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "iv:aes-cbc",
+      "aliases": [
+        "aes-cbc-iv"
+      ],
+      "kind": "artifact",
+      "category": "Security Material",
+      "label": "AES-CBC IV",
+      "description": "Public 128-bit IV that must be unique for every encryption.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "pem:keypair",
+      "aliases": [
+        "pem-keypair"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "PEM keypair",
+      "description": "PKCS#8 private key and SPKI public key in PEM.",
+      "env": null,
+      "options": [
+        {
+          "name": "algorithm",
+          "cliName": "algorithm",
+          "type": "enum",
+          "default": "rsa",
+          "choices": [
+            "rsa",
+            "ec",
+            "ed25519",
+            "x25519"
+          ]
+        },
+        {
+          "name": "bits",
+          "cliName": "bits",
+          "type": "integer",
+          "default": 3072,
+          "min": 2048,
+          "max": 4096,
+          "unit": "bits",
+          "when": {
+            "algorithm": "rsa"
+          }
+        },
+        {
+          "name": "curve",
+          "cliName": "curve",
+          "type": "enum",
+          "default": "P-256",
+          "choices": [
+            "P-256",
+            "P-384",
+            "P-521"
+          ],
+          "when": {
+            "algorithm": "ec"
+          }
+        },
+        {
+          "name": "encryptPrivateKey",
+          "cliName": "encrypt-private-key",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "passphrase",
+          "cliName": null,
+          "type": "string",
+          "required": true,
+          "secret": true,
+          "maxLength": 4096,
+          "when": {
+            "encryptPrivateKey": true
+          }
+        }
+      ],
+      "countLimit": "dynamic",
+      "multiline": false
+    },
+    {
+      "id": "jwk:keypair",
+      "aliases": [
+        "jwk-keypair"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "JWK keypair",
+      "description": "Private and public JSON Web Keys with RFC 7638 kid.",
+      "env": null,
+      "options": [
+        {
+          "name": "algorithm",
+          "cliName": "algorithm",
+          "type": "enum",
+          "default": "rsa",
+          "choices": [
+            "rsa",
+            "ec",
+            "ed25519",
+            "x25519"
+          ]
+        },
+        {
+          "name": "bits",
+          "cliName": "bits",
+          "type": "integer",
+          "default": 3072,
+          "min": 2048,
+          "max": 4096,
+          "unit": "bits",
+          "when": {
+            "algorithm": "rsa"
+          }
+        },
+        {
+          "name": "curve",
+          "cliName": "curve",
+          "type": "enum",
+          "default": "P-256",
+          "choices": [
+            "P-256",
+            "P-384",
+            "P-521"
+          ],
+          "when": {
+            "algorithm": "ec"
+          }
+        },
+        {
+          "name": "use",
+          "cliName": "use",
+          "type": "enum",
+          "default": "auto",
+          "choices": [
+            "auto",
+            "sig",
+            "enc"
+          ]
+        }
+      ],
+      "countLimit": "dynamic",
+      "multiline": false
+    },
+    {
+      "id": "jwks:keyset",
+      "aliases": [
+        "jwks"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "JWKS keyset",
+      "description": "Private and public JSON Web Key Sets.",
+      "env": null,
+      "options": [
+        {
+          "name": "algorithm",
+          "cliName": "algorithm",
+          "type": "enum",
+          "default": "rsa",
+          "choices": [
+            "rsa",
+            "ec",
+            "ed25519",
+            "x25519"
+          ]
+        },
+        {
+          "name": "bits",
+          "cliName": "bits",
+          "type": "integer",
+          "default": 3072,
+          "min": 2048,
+          "max": 4096,
+          "unit": "bits",
+          "when": {
+            "algorithm": "rsa"
+          }
+        },
+        {
+          "name": "curve",
+          "cliName": "curve",
+          "type": "enum",
+          "default": "P-256",
+          "choices": [
+            "P-256",
+            "P-384",
+            "P-521"
+          ],
+          "when": {
+            "algorithm": "ec"
+          }
+        },
+        {
+          "name": "use",
+          "cliName": "use",
+          "type": "enum",
+          "default": "auto",
+          "choices": [
+            "auto",
+            "sig",
+            "enc"
+          ]
+        },
+        {
+          "name": "keys",
+          "cliName": "keys",
+          "type": "integer",
+          "default": 1,
+          "min": 1,
+          "max": 20,
+          "unit": "keys"
+        }
+      ],
+      "countLimit": "dynamic",
+      "multiline": false
+    },
+    {
+      "id": "openssh:keypair",
+      "aliases": [
+        "ssh-keypair",
+        "openssh"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "OpenSSH keypair",
+      "description": "Native OpenSSH private key and authorized_keys public line.",
+      "env": null,
+      "options": [
+        {
+          "name": "algorithm",
+          "cliName": "algorithm",
+          "type": "enum",
+          "default": "ed25519",
+          "choices": [
+            "ed25519",
+            "ecdsa",
+            "rsa"
+          ]
+        },
+        {
+          "name": "bits",
+          "cliName": "bits",
+          "type": "integer",
+          "default": 3072,
+          "min": 3072,
+          "max": 4096,
+          "unit": "bits",
+          "when": {
+            "algorithm": "rsa"
+          }
+        },
+        {
+          "name": "curve",
+          "cliName": "curve",
+          "type": "enum",
+          "default": "nistp256",
+          "choices": [
+            "nistp256",
+            "nistp384",
+            "nistp521"
+          ],
+          "when": {
+            "algorithm": "ecdsa"
+          }
+        },
+        {
+          "name": "comment",
+          "cliName": "comment",
+          "type": "string",
+          "default": "secretgen",
+          "required": false,
+          "secret": false,
+          "maxLength": 512
+        },
+        {
+          "name": "encryptPrivateKey",
+          "cliName": "encrypt-private-key",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "passphrase",
+          "cliName": null,
+          "type": "string",
+          "required": true,
+          "secret": true,
+          "maxLength": 4096,
+          "when": {
+            "encryptPrivateKey": true
+          }
+        }
+      ],
+      "countLimit": "dynamic",
+      "multiline": false
+    },
+    {
+      "id": "wireguard:keypair",
+      "aliases": [
+        "wg-keypair"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "WireGuard keypair",
+      "description": "WireGuard-compatible Base64 private and public keys.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "age:keypair",
+      "aliases": [
+        "age-identity"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "age identity and recipient",
+      "description": "Native age X25519 identity and recipient strings.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "paseto:v4-public-keypair",
+      "aliases": [
+        "paseto-public",
+        "k4-public"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "PASETO v4.public keypair",
+      "description": "Ed25519 PASETO v4.public keys serialized as PASERK.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "sodium:box-keypair",
+      "aliases": [
+        "sodium-box"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "libsodium box keypair",
+      "description": "Raw crypto_box Curve25519 public/private keypair.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "sodium:sign-keypair",
+      "aliases": [
+        "sodium-sign"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "libsodium signing keypair",
+      "description": "Raw crypto_sign Ed25519 public/secret keypair.",
+      "env": null,
+      "options": [],
+      "countLimit": 100,
+      "multiline": false
+    },
+    {
+      "id": "dkim:keypair",
+      "aliases": [
+        "dkim"
+      ],
+      "kind": "artifact",
+      "category": "Key Artifacts",
+      "label": "DKIM keypair and DNS record",
+      "description": "DKIM private key, public material and DNS TXT record.",
+      "env": null,
+      "options": [
+        {
+          "name": "algorithm",
+          "cliName": "algorithm",
+          "type": "enum",
+          "default": "rsa",
+          "choices": [
+            "rsa",
+            "ed25519"
+          ]
+        },
+        {
+          "name": "bits",
+          "cliName": "bits",
+          "type": "integer",
+          "default": 2048,
+          "min": 2048,
+          "max": 4096,
+          "unit": "bits",
+          "when": {
+            "algorithm": "rsa"
+          }
+        },
+        {
+          "name": "selector",
+          "cliName": "selector",
+          "type": "string",
+          "default": "default",
+          "required": true,
+          "secret": false,
+          "maxLength": 512
+        },
+        {
+          "name": "domain",
+          "cliName": "domain",
+          "type": "string",
+          "default": "",
+          "required": false,
+          "secret": false,
+          "maxLength": 512
+        }
+      ],
+      "countLimit": "dynamic",
+      "multiline": false
+    }
+  ],
+  "artifacts": {
+    "hotp:provisioning": {
+      "metadataKeys": [
+        "counter",
+        "digits",
+        "type"
+      ],
+      "parts": [
+        {
+          "role": "secret",
+          "filename": "secret.txt",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "provisioning-uri",
+          "filename": "otpauth-uri.txt",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "metadata",
+          "filename": "metadata.json",
+          "mediaType": "application/json",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "totp:provisioning": {
+      "metadataKeys": [
+        "algorithm",
+        "digits",
+        "period",
+        "type"
+      ],
+      "parts": [
+        {
+          "role": "secret",
+          "filename": "secret.txt",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "provisioning-uri",
+          "filename": "otpauth-uri.txt",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "metadata",
+          "filename": "metadata.json",
+          "mediaType": "application/json",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "mfa:recovery-codes": {
+      "metadataKeys": [
+        "alphabet",
+        "codeLength",
+        "count",
+        "oneTimeUse"
+      ],
+      "parts": [
+        {
+          "role": "codes",
+          "filename": "recovery-codes.txt",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "codes-json",
+          "filename": "recovery-codes.json",
+          "mediaType": "application/json",
+          "secret": true,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "aspnet:machine-key": {
+      "metadataKeys": [
+        "decryption",
+        "validation"
+      ],
+      "parts": [
+        {
+          "role": "validation-key",
+          "filename": "validation-key.txt",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "decryption-key",
+          "filename": "decryption-key.txt",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "web-config",
+          "filename": "machine-key.xml",
+          "mediaType": "application/xml",
+          "secret": true,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "salt:argon2": {
+      "metadataKeys": [
+        "bytes",
+        "encoding",
+        "secret",
+        "uniquePerOperation"
+      ],
+      "parts": [
+        {
+          "role": "encoded",
+          "filename": "argon2-salt.txt",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        },
+        {
+          "role": "raw",
+          "filename": "argon2-salt.bin",
+          "mediaType": "application/octet-stream",
+          "secret": false,
+          "encoding": "binary"
+        }
+      ]
+    },
+    "nonce:aes-gcm": {
+      "metadataKeys": [
+        "bytes",
+        "encoding",
+        "secret",
+        "uniquePerOperation"
+      ],
+      "parts": [
+        {
+          "role": "encoded",
+          "filename": "aes-gcm-nonce.txt",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        },
+        {
+          "role": "raw",
+          "filename": "aes-gcm-nonce.bin",
+          "mediaType": "application/octet-stream",
+          "secret": false,
+          "encoding": "binary"
+        }
+      ]
+    },
+    "nonce:chacha20-poly1305": {
+      "metadataKeys": [
+        "bytes",
+        "encoding",
+        "secret",
+        "uniquePerOperation"
+      ],
+      "parts": [
+        {
+          "role": "encoded",
+          "filename": "chacha20-poly1305-nonce.txt",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        },
+        {
+          "role": "raw",
+          "filename": "chacha20-poly1305-nonce.bin",
+          "mediaType": "application/octet-stream",
+          "secret": false,
+          "encoding": "binary"
+        }
+      ]
+    },
+    "nonce:xchacha20-poly1305": {
+      "metadataKeys": [
+        "bytes",
+        "encoding",
+        "secret",
+        "uniquePerOperation"
+      ],
+      "parts": [
+        {
+          "role": "encoded",
+          "filename": "xchacha20-poly1305-nonce.txt",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        },
+        {
+          "role": "raw",
+          "filename": "xchacha20-poly1305-nonce.bin",
+          "mediaType": "application/octet-stream",
+          "secret": false,
+          "encoding": "binary"
+        }
+      ]
+    },
+    "iv:aes-cbc": {
+      "metadataKeys": [
+        "bytes",
+        "encoding",
+        "secret",
+        "uniquePerOperation"
+      ],
+      "parts": [
+        {
+          "role": "encoded",
+          "filename": "aes-cbc-iv.txt",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        },
+        {
+          "role": "raw",
+          "filename": "aes-cbc-iv.bin",
+          "mediaType": "application/octet-stream",
+          "secret": false,
+          "encoding": "binary"
+        }
+      ]
+    },
+    "pem:keypair": {
+      "metadataKeys": [
+        "algorithm",
+        "bits",
+        "encrypted"
+      ],
+      "parts": [
+        {
+          "role": "private-key",
+          "filename": "private-key.pem",
+          "mediaType": "application/x-pem-file",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "public-key",
+          "filename": "public-key.pem",
+          "mediaType": "application/x-pem-file",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "jwk:keypair": {
+      "metadataKeys": [
+        "alg",
+        "algorithm",
+        "kid",
+        "use"
+      ],
+      "parts": [
+        {
+          "role": "private-jwk",
+          "filename": "private.jwk.json",
+          "mediaType": "application/json",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "public-jwk",
+          "filename": "public.jwk.json",
+          "mediaType": "application/json",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "jwks:keyset": {
+      "metadataKeys": [
+        "algorithm",
+        "keys"
+      ],
+      "parts": [
+        {
+          "role": "private-jwks",
+          "filename": "private.jwks.json",
+          "mediaType": "application/jwk-set+json",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "public-jwks",
+          "filename": "jwks.json",
+          "mediaType": "application/jwk-set+json",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "openssh:keypair": {
+      "metadataKeys": [
+        "algorithm",
+        "encrypted"
+      ],
+      "parts": [
+        {
+          "role": "private-key",
+          "filename": "id_ed25519",
+          "mediaType": "application/x-openssh-private-key",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "public-key",
+          "filename": "id_ed25519.pub",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "wireguard:keypair": {
+      "metadataKeys": [
+        "algorithm"
+      ],
+      "parts": [
+        {
+          "role": "private-key",
+          "filename": "privatekey",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "public-key",
+          "filename": "publickey",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "age:keypair": {
+      "metadataKeys": [
+        "algorithm"
+      ],
+      "parts": [
+        {
+          "role": "identity",
+          "filename": "identity.txt",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "recipient",
+          "filename": "recipient.txt",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "paseto:v4-public-keypair": {
+      "metadataKeys": [
+        "format",
+        "purpose",
+        "version"
+      ],
+      "parts": [
+        {
+          "role": "secret-key",
+          "filename": "k4.secret",
+          "mediaType": "text/plain",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "public-key",
+          "filename": "k4.public",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    },
+    "sodium:box-keypair": {
+      "metadataKeys": [
+        "algorithm",
+        "privateBytes",
+        "publicBytes"
+      ],
+      "parts": [
+        {
+          "role": "private-key",
+          "filename": "box.private",
+          "mediaType": "application/octet-stream",
+          "secret": true,
+          "encoding": "binary"
+        },
+        {
+          "role": "public-key",
+          "filename": "box.public",
+          "mediaType": "application/octet-stream",
+          "secret": false,
+          "encoding": "binary"
+        }
+      ]
+    },
+    "sodium:sign-keypair": {
+      "metadataKeys": [
+        "algorithm",
+        "publicBytes",
+        "secretBytes"
+      ],
+      "parts": [
+        {
+          "role": "secret-key",
+          "filename": "sign.secret",
+          "mediaType": "application/octet-stream",
+          "secret": true,
+          "encoding": "binary"
+        },
+        {
+          "role": "public-key",
+          "filename": "sign.public",
+          "mediaType": "application/octet-stream",
+          "secret": false,
+          "encoding": "binary"
+        }
+      ]
+    },
+    "dkim:keypair": {
+      "metadataKeys": [
+        "algorithm",
+        "selector"
+      ],
+      "parts": [
+        {
+          "role": "private-key",
+          "filename": "dkim-private-key.pem",
+          "mediaType": "application/x-pem-file",
+          "secret": true,
+          "encoding": "utf8"
+        },
+        {
+          "role": "public-key",
+          "filename": "dkim-public-key.txt",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        },
+        {
+          "role": "dns-record",
+          "filename": "dkim-dns-record.txt",
+          "mediaType": "text/plain",
+          "secret": false,
+          "encoding": "utf8"
+        }
+      ]
+    }
+  }
+}

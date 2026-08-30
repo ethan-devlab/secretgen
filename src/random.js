@@ -51,53 +51,8 @@ export function fernetBase64url(bytes = 32) {
     .replaceAll('/', '_');
 }
 
-export function encodeBase32(input, padding = false) {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-  let bits = 0;
-  let value = 0;
-  let output = '';
-
-  for (const byte of input) {
-    value = (value << 8) | byte;
-    bits += 8;
-    while (bits >= 5) {
-      output += alphabet[(value >>> (bits - 5)) & 31];
-      bits -= 5;
-      value &= bits === 0 ? 0 : (1 << bits) - 1;
-    }
-  }
-
-  if (bits > 0) {
-    output += alphabet[(value << (5 - bits)) & 31];
-  }
-
-  if (padding) output += '='.repeat((8 - (output.length % 8)) % 8);
-
-  return output;
-}
-
-export function base32(bytes, padding = false) {
-  return encodeBase32(secureBytes(bytes), padding);
-}
-
 export function uuidV4() {
   return randomUUID();
-}
-
-export function uuidV7(now = Date.now()) {
-  if (!Number.isInteger(now) || now < 0 || now > 0xffffffffffff) {
-    throw new RangeError('UUIDv7 timestamp must be an integer in the 48-bit Unix millisecond range');
-  }
-  const bytes = secureBytes(16);
-  let timestamp = BigInt(now);
-  for (let i = 5; i >= 0; i -= 1) {
-    bytes[i] = Number(timestamp & 0xffn);
-    timestamp >>= 8n;
-  }
-  bytes[6] = 0x70 | (bytes[6] & 0x0f);
-  bytes[8] = 0x80 | (bytes[8] & 0x3f);
-  const value = bytes.toString('hex');
-  return `${value.slice(0, 8)}-${value.slice(8, 12)}-${value.slice(12, 16)}-${value.slice(16, 20)}-${value.slice(20)}`;
 }
 
 export function assertInteger(name, value, min, max) {

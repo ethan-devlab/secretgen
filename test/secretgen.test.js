@@ -4,8 +4,8 @@ import { generate, generateArtifact, getPresets } from '../src/index.js';
 
 const presets = getPresets();
 
-test('ships exactly 67 presets', () => {
-  assert.equal(presets.length, 67);
+test('ships exactly 80 presets', () => {
+  assert.equal(presets.length, 80);
 });
 
 test('every id and alias is unique', () => {

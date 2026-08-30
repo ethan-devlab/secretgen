@@ -1,18 +1,19 @@
 import {
-  createHash,
   generateKeyPairSync,
-  randomBytes,
 } from 'node:crypto';
 import {
   ALPHANUMERIC,
   DIGITS,
-  base32,
   base64,
   base64url,
   hex,
   randomString,
   secureBytes,
 } from './random.js';
+import { exportJwkPair } from './adapters/jose.js';
+import { generateNatsKeyPair } from './adapters/nats.js';
+import { generateHotpUri, generateOtpSecret, generateTotpUri } from './adapters/otp.js';
+import { generatePasetoV4PublicKeyPair } from './adapters/paseto.js';
 
 const integerOption = (name, defaultValue, min, max, unit = name, when) => ({
   name,
@@ -69,23 +70,9 @@ function artifact(parts, metadata = {}) {
   return { kind: 'artifact', parts, metadata };
 }
 
-function encodeOtpUri(type, options, secret) {
-  const label = options.issuer ? `${options.issuer}:${options.account}` : options.account;
-  const query = new URLSearchParams({
-    secret,
-    ...(options.issuer ? { issuer: options.issuer } : {}),
-    digits: String(options.digits),
-    ...(type === 'hotp' ? { counter: String(options.counter) } : {
-      algorithm: options.algorithm,
-      period: String(options.period),
-    }),
-  });
-  return `otpauth://${type}/${encodeURIComponent(label)}?${query}`;
-}
-
 function otpParts(type, options) {
-  const secret = base32(options.secretBytes);
-  const uri = encodeOtpUri(type, options, secret);
+  const secret = generateOtpSecret(options.secretBytes);
+  const uri = type === 'hotp' ? generateHotpUri(options, secret) : generateTotpUri(options, secret);
   const metadata = type === 'hotp'
     ? { type, counter: options.counter, digits: options.digits }
     : { type, algorithm: options.algorithm, digits: options.digits, period: options.period };
@@ -94,6 +81,10 @@ function otpParts(type, options) {
     textPart('provisioning-uri', 'otpauth-uri.txt', uri, true),
     textPart('metadata', 'metadata.json', JSON.stringify(metadata, null, 2), false, 'application/json'),
   ], metadata);
+}
+
+function metadataPart(metadata) {
+  return textPart('metadata', 'metadata.json', JSON.stringify(metadata, null, 2), false, 'application/json');
 }
 
 function randomCodes(options) {
@@ -146,23 +137,10 @@ function defaultAlgorithmMetadata(options) {
   return { alg: 'ECDH-ES', use: options.use === 'auto' ? 'enc' : options.use };
 }
 
-function jwkThumbprint(jwk) {
-  let canonical;
-  if (jwk.kty === 'RSA') canonical = { e: jwk.e, kty: jwk.kty, n: jwk.n };
-  else if (jwk.kty === 'EC') canonical = { crv: jwk.crv, kty: jwk.kty, x: jwk.x, y: jwk.y };
-  else canonical = { crv: jwk.crv, kty: jwk.kty, x: jwk.x };
-  return createHash('sha256').update(JSON.stringify(canonical)).digest('base64url');
-}
-
-function createJwkPair(options) {
+async function createJwkPair(options) {
   const pair = nodeKeyPair(options);
-  const privateJwk = pair.privateKey.export({ format: 'jwk' });
-  const publicJwk = pair.publicKey.export({ format: 'jwk' });
   const metadata = defaultAlgorithmMetadata(options);
-  const kid = jwkThumbprint(publicJwk);
-  Object.assign(privateJwk, metadata, { kid });
-  Object.assign(publicJwk, metadata, { kid });
-  return { privateJwk, publicJwk, metadata: { ...metadata, kid, algorithm: options.algorithm } };
+  return exportJwkPair(pair, metadata, options.algorithm);
 }
 
 function pemKeyPair(options) {
@@ -180,19 +158,19 @@ function pemKeyPair(options) {
   ], { algorithm: options.algorithm, encrypted: options.encryptPrivateKey, ...(options.bits ? { bits: options.bits } : {}), ...(options.curve ? { curve: options.curve } : {}) });
 }
 
-function jwkKeyPair(options) {
-  const pair = createJwkPair(options);
+async function jwkKeyPair(options) {
+  const pair = await createJwkPair(options);
   return artifact([
     textPart('private-jwk', 'private.jwk.json', JSON.stringify(pair.privateJwk, null, 2), true, 'application/json'),
     textPart('public-jwk', 'public.jwk.json', JSON.stringify(pair.publicJwk, null, 2), false, 'application/json'),
   ], pair.metadata);
 }
 
-function jwksKeyset(options) {
+async function jwksKeyset(options) {
   const privateKeys = [];
   const publicKeys = [];
   for (let i = 0; i < options.keys; i += 1) {
-    const pair = createJwkPair(options);
+    const pair = await createJwkPair(options);
     privateKeys.push(pair.privateJwk);
     publicKeys.push(pair.publicJwk);
   }
@@ -262,12 +240,7 @@ async function ageKeyPair() {
 }
 
 async function pasetoPublicKeyPair() {
-  const { generateKeys } = await import('paseto-ts/v4');
-  const getRandomValues = (target) => {
-    target.set(randomBytes(target.length));
-    return target;
-  };
-  const { secretKey, publicKey } = generateKeys('public', { format: 'paserk', getRandomValues });
+  const { secretKey, publicKey } = generatePasetoV4PublicKeyPair();
   return artifact([
     textPart('secret-key', 'k4.secret', secretKey, true),
     textPart('public-key', 'k4.public', publicKey, false),
@@ -313,6 +286,60 @@ function dkimKeyPair(options) {
     textPart('public-key', 'dkim-public-key.txt', publicValue, false),
     textPart('dns-record', 'dkim-dns-record.txt', `${owner} TXT "${record}"`, false),
   ], { algorithm: options.algorithm, selector: options.selector, ...(options.domain ? { domain: options.domain } : {}) });
+}
+
+function strapiSecrets() {
+  const appKeys = Array.from({ length: 4 }, () => base64(32));
+  const values = {
+    APP_KEYS: appKeys,
+    API_TOKEN_SALT: base64(32),
+    ADMIN_JWT_SECRET: base64(32),
+    JWT_SECRET: base64(32),
+    TRANSFER_TOKEN_SALT: base64(32),
+    ENCRYPTION_KEY: base64(32),
+  };
+  const metadata = {
+    appKeyCount: appKeys.length,
+    valueBytes: 32,
+    encoding: 'base64',
+    variables: Object.keys(values),
+  };
+  const env = [
+    `APP_KEYS=${appKeys.join(',')}`,
+    ...Object.entries(values)
+      .filter(([name]) => name !== 'APP_KEYS')
+      .map(([name, value]) => `${name}=${value}`),
+  ].join('\n');
+  return artifact([
+    textPart('environment', '.env', env, true),
+    textPart('secrets-json', 'strapi-secrets.json', JSON.stringify(values, null, 2), true, 'application/json'),
+    metadataPart(metadata),
+  ], metadata);
+}
+
+function mongodbKeyfile(options) {
+  const keys = Array.from({ length: options.keys }, () => base64(756));
+  const data = options.keys === 1 ? keys[0] : `${keys.map((key) => `- ${key}`).join('\n')}\n`;
+  const metadata = {
+    keys: options.keys,
+    keyBytes: 756,
+    encoding: 'base64',
+    format: options.keys === 1 ? 'single-key' : 'yaml-sequence',
+  };
+  return artifact([
+    textPart('keyfile', 'mongodb-keyfile', data, true),
+    metadataPart(metadata),
+  ], metadata);
+}
+
+async function natsNkey(options) {
+  const pair = await generateNatsKeyPair(options.type);
+  const metadata = { type: options.type, algorithm: 'Ed25519', format: 'NKey' };
+  return artifact([
+    textPart('seed', 'nkey.seed', pair.seed, true),
+    textPart('public-key', 'nkey.pub', pair.publicKey, false),
+    metadataPart(metadata),
+  ], metadata);
 }
 
 const keyAlgorithmOptions = () => [
@@ -441,5 +468,20 @@ export const ARTIFACT_PRESETS = [
     label: 'DKIM keypair and DNS record', description: 'DKIM private key, public material and DNS TXT record.', env: null,
     options: [enumOption('algorithm', 'rsa', ['rsa', 'ed25519']), integerOption('bits', 2048, 2048, 4096, 'bits', { algorithm: 'rsa' }), stringOption('selector', 'default', { required: true }), stringOption('domain', '')],
     countLimit: keyCountLimit, generate: dkimKeyPair,
+  },
+  {
+    id: 'strapi:secrets', aliases: [], category: 'JavaScript', kind: 'artifact',
+    label: 'Strapi deployment secrets', description: 'Copy-ready Strapi environment bundle with independent security values.', env: null,
+    options: [], countLimit: 100, generate: strapiSecrets,
+  },
+  {
+    id: 'mongodb:keyfile', aliases: [], category: 'Infrastructure', kind: 'artifact',
+    label: 'MongoDB keyfile', description: 'MongoDB internal-auth keyfile with one key or a YAML key sequence.', env: null,
+    options: [integerOption('keys', 1, 1, 10, 'keys')], countLimit: 100, generate: mongodbKeyfile,
+  },
+  {
+    id: 'nats:nkey', aliases: [], category: 'Infrastructure', kind: 'artifact',
+    label: 'NATS NKey pair', description: 'NATS Ed25519 seed and public NKey for the selected identity type.', env: null,
+    options: [enumOption('type', 'user', ['user', 'account', 'operator', 'server', 'cluster'])], countLimit: 100, generate: natsNkey,
   },
 ];

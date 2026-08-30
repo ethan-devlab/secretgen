@@ -5,7 +5,7 @@ import { writeArtifactBundle, readPassphraseFile } from './artifact-files.js';
 import { chooseArtifactOutput, choosePreset, configurePreset } from './interactive.js';
 import { getCountLimit, resolvePresetOptions } from './schema.js';
 
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 
 function parseInteger(value, flag) {
   if (!/^\d+$/u.test(value ?? '')) throw new Error(`${flag} requires a positive integer.`);
@@ -160,7 +160,7 @@ function printHelp() {
   process.stdout.write('Usage:\n');
   process.stdout.write('  secretgen                              Interactive preset and option prompts\n');
   process.stdout.write('  secretgen <preset> [options]           Generate directly\n');
-  process.stdout.write('  secretgen --list                       List all 67 presets\n');
+  process.stdout.write('  secretgen --list                       List all presets\n');
   process.stdout.write('  secretgen --info <preset>              Show preset details\n\n');
   process.stdout.write('Common options:\n');
   process.stdout.write('  -b, --bytes <n>             Random byte count when supported\n');
@@ -168,9 +168,9 @@ function printHelp() {
   process.stdout.write('  -n, --count <n>             Generate multiple values or artifacts\n');
   process.stdout.write('      --format <type>         Scalar: raw | env | json; artifact: json or raw with --part\n');
   process.stdout.write('      --env-name <name>       Override the scalar environment variable name\n');
-  process.stdout.write('      --output-dir <path>     Write an artifact bundle directory\n');
+  process.stdout.write('      --output-dir <path>     Write an artifact or scalar bundle directory\n');
   process.stdout.write('      --part <role|filename>  Write one artifact part to stdout\n');
-  process.stdout.write('      --force                 Replace an existing artifact bundle\n');
+  process.stdout.write('      --force                 Replace an existing output bundle\n');
   process.stdout.write('      --passphrase-env <var>  Read a private-key passphrase from an environment variable\n');
   process.stdout.write('      --passphrase-file <p>   Read a private-key passphrase from a file\n');
   process.stdout.write('  -i, --interactive           Prompt for the selected preset options\n');
@@ -212,6 +212,7 @@ function printInfo(name) {
   process.stdout.write(`  ${preset.label}\n`);
   process.stdout.write(`  Category: ${preset.category}\n`);
   process.stdout.write(`  Kind: ${preset.kind}\n`);
+  if (preset.kind === 'scalar') process.stdout.write(`  Sensitivity: ${preset.sensitivity}\n`);
   process.stdout.write(`  ${preset.description}\n`);
   process.stdout.write(`  Aliases: ${preset.aliases.join(', ') || '(none)'}\n`);
   if (preset.env) process.stdout.write(`  Suggested env: ${preset.env}\n`);
@@ -262,6 +263,22 @@ function artifactJson(preset, artifacts) {
     : { preset: preset.id, artifacts: serialized }, null, 2);
 }
 
+function scalarArtifact(preset, value) {
+  const sensitivity = preset.sensitivity ?? 'secret';
+  return {
+    kind: 'artifact',
+    metadata: { sensitivity },
+    parts: [{
+      role: preset.bundleRole ?? 'value',
+      filename: preset.bundleFilename ?? 'value.txt',
+      mediaType: 'text/plain',
+      secret: sensitivity !== 'public',
+      encoding: 'utf8',
+      data: value,
+    }],
+  };
+}
+
 function writeSelectedPart(artifact, selector) {
   const matches = artifact.parts.filter((part) => part.role === selector || part.filename === selector);
   if (matches.length === 0) throw new Error(`Artifact has no part named ${selector}.`);
@@ -309,6 +326,9 @@ export async function runCLI(argv = process.argv.slice(2)) {
       break;
     }
 
+    if (preset.kind === 'scalar' && (args.part || args.passphraseEnv || args.passphraseFile)) {
+      throw new Error('--part and passphrase flags are only valid for artifact presets.');
+    }
     const passphrase = await loadPassphrase(args);
     if (passphrase !== undefined) {
       if (!preset.options.some((option) => option.name === 'passphrase')) throw new Error(`${preset.id} does not support private-key passphrase encryption.`);
@@ -324,8 +344,17 @@ export async function runCLI(argv = process.argv.slice(2)) {
     if (args.count < 1 || args.count > countLimit) throw new Error(`--count for ${preset.id} must be between 1 and ${countLimit}.`);
 
     if (preset.kind === 'scalar') {
-      if (args.outputDir || args.part || args.force || args.passphraseEnv || args.passphraseFile) throw new Error('Artifact output and passphrase flags cannot be used with scalar presets.');
+      if (args.outputDir && (args.format || args.envName)) throw new Error('--output-dir cannot be combined with --format or --env-name.');
+      if (args.force && !args.outputDir) throw new Error('--force requires --output-dir.');
+      let outputDir = args.outputDir;
+      if ((args.interactive || !args.preset) && !outputDir) outputDir = await chooseArtifactOutput('stdout');
       const values = Array.from({ length: args.count }, () => generate(preset.id, options));
+      if (outputDir) {
+        const artifacts = values.map((value) => scalarArtifact(preset, value));
+        const written = await writeArtifactBundle(outputDir, preset.id, artifacts, { force: args.force });
+        process.stdout.write(`${path.resolve(written)}\n`);
+        return;
+      }
       process.stdout.write(`${formatValues(preset, values, args.format ?? 'raw', args.envName)}\n`);
       return;
     }
