@@ -91,18 +91,24 @@ test('scalar bundle output writes values once with sensitivity-aware permissions
   const secretManifest = await readFile(path.join(secretTarget, 'secretgen-manifest.json'), 'utf8');
   assert.equal(secret.length, 40);
   assert.ok(!secretManifest.includes(secret));
-  assert.equal((await stat(path.join(secretTarget, 'value.txt'))).mode & 0o777, 0o600);
+  if (process.platform !== 'win32') {
+    assert.equal((await stat(path.join(secretTarget, 'value.txt'))).mode & 0o777, 0o600);
+  }
   await assert.rejects(() => run(['generic:password', '--output-dir', secretTarget]), /already exists/u);
   await run(['generic:password', '--output-dir', secretTarget, '--force']);
 
   const publicTarget = path.join(parent, 'public');
   await run(['uuid:v7', '--output-dir', publicTarget]);
-  assert.equal((await stat(path.join(publicTarget, 'value.txt'))).mode & 0o777, 0o644);
+  if (process.platform !== 'win32') {
+    assert.equal((await stat(path.join(publicTarget, 'value.txt'))).mode & 0o777, 0o644);
+  }
 
   const rabbitTarget = path.join(parent, 'rabbit');
   await run(['rabbitmq:erlang-cookie', '--output-dir', rabbitTarget]);
   assert.deepEqual((await readdir(rabbitTarget)).sort(), ['.erlang.cookie', 'secretgen-manifest.json']);
-  assert.equal((await stat(path.join(rabbitTarget, '.erlang.cookie'))).mode & 0o777, 0o600);
+  if (process.platform !== 'win32') {
+    assert.equal((await stat(path.join(rabbitTarget, '.erlang.cookie'))).mode & 0o777, 0o600);
+  }
 });
 
 test('scalar bundle output preserves batch layout and rejects conflicting scalar output modes', async (t) => {
@@ -111,7 +117,9 @@ test('scalar bundle output preserves batch layout and rejects conflicting scalar
   const target = path.join(parent, 'batch');
   await run(['generic:base58', '--count', '2', '--output-dir', target]);
   assert.deepEqual((await readdir(target)).sort(), ['001', '002', 'secretgen-manifest.json']);
-  assert.equal((await stat(path.join(target, '001', 'value.txt'))).mode & 0o777, 0o600);
+  if (process.platform !== 'win32') {
+    assert.equal((await stat(path.join(target, '001', 'value.txt'))).mode & 0o777, 0o600);
+  }
 
   await assert.rejects(() => run(['generic:base58', '--output-dir', target, '--format', 'raw']), /cannot be combined/u);
   await assert.rejects(() => run(['generic:base58', '--output-dir', target, '--env-name', 'VALUE']), /cannot be combined/u);
